@@ -5,10 +5,15 @@ import {
   assignCanvas,
   changeColor,
   changeStrokeWidth,
+  changeTool,
+  clearSupport,
   drawLast,
   drawLine,
+  drawRect,
   initLine,
+  initRect,
   save,
+  traceRect,
   undo,
 } from "./draw.actions";
 import { DrawMachineContext, DrawMachineEvents } from "./draw.types";
@@ -22,6 +27,8 @@ export const drawMachine = createMachine<DrawMachineContext, DrawMachineEvents>(
     context: {
       canvas: null,
       ctx: null,
+      supportCanvas: null,
+      supportCtx: null,
       tool: "line",
       line: null,
       history: [],
@@ -66,13 +73,18 @@ export const drawMachine = createMachine<DrawMachineContext, DrawMachineEvents>(
             initial: "idle",
             states: {
               idle: {
-                entry: "save",
+                entry: ["save", "clearSupport"],
                 on: {
                   MOUSE_DOWN: [
                     {
                       cond: "isLineTool",
                       target: "line",
                       actions: "initLine",
+                    },
+                    {
+                      cond: "isRectTool",
+                      target: "rect",
+                      actions: "initRect",
                     },
                   ],
                   BACKSPACE_PRESS: [
@@ -86,6 +98,9 @@ export const drawMachine = createMachine<DrawMachineContext, DrawMachineEvents>(
                   },
                   CHANGE_STROKE_WIDTH: {
                     actions: "changeStrokeWidth",
+                  },
+                  CHANGE_TOOL: {
+                    actions: "changeTool",
                   },
                 },
               },
@@ -104,6 +119,22 @@ export const drawMachine = createMachine<DrawMachineContext, DrawMachineEvents>(
                   },
                 },
               },
+              rect: {
+                on: {
+                  MOUSE_MOVE: [
+                    {
+                      actions: "traceRect",
+                    },
+                  ],
+                  MOUSE_UP: {
+                    target: "idle",
+                    actions: "drawRect",
+                  },
+                  MOUSE_OUT: {
+                    target: "idle",
+                  },
+                },
+              },
             },
           },
         },
@@ -114,6 +145,7 @@ export const drawMachine = createMachine<DrawMachineContext, DrawMachineEvents>(
   {
     guards: {
       isLineTool: ({ tool }) => tool === "line",
+      isRectTool: ({ tool }) => tool === "rect",
       canUndo: ({ history }) => history.length > 1,
     },
     actions: {
@@ -123,8 +155,13 @@ export const drawMachine = createMachine<DrawMachineContext, DrawMachineEvents>(
       assignCanvas,
       initLine,
       drawLine,
+      initRect,
+      drawRect,
+      traceRect,
       changeColor,
       changeStrokeWidth,
+      changeTool,
+      clearSupport,
     },
     services: {
       resize,

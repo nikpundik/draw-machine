@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { useDrawMachine } from "../../providers/global";
 import { colors } from "../../utils/colors";
+import { Tool, tools } from "../../utils/tools";
 
 const widths = [5, 10, 15, 20];
 
@@ -12,6 +13,21 @@ const GUI: FC = () => {
     <div className="guiContainer">
       <div className="gui">
         <div className="guiTools">
+          <select
+            value={current.context.tool}
+            onChange={(event) => {
+              send({
+                type: "CHANGE_TOOL",
+                tool: event.target.value as Tool,
+              });
+            }}
+          >
+            {tools.map((tool) => (
+              <option key={tool} value={tool}>
+                {tool}
+              </option>
+            ))}
+          </select>
           <select
             value={current.context.color.hex}
             onChange={(event) => {
