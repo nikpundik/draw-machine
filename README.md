@@ -8,4 +8,3 @@ Very basic example of a html drawing app in React with state machines and XState
 - Rect tool
 - Color selection
 - Undo action
-- Togglable GUI
