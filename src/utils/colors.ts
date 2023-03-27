@@ -15,5 +15,10 @@ export const colors: Color[] = [
   { name: "Salmon Orange", hex: "#FF8D6D" },
   { name: "Grapefruit", hex: "#FF585D" },
   { name: "Orange Delight", hex: "#FFC658" },
-  { name: "Pasta Luego", hex: "#F9E27D" }
+  { name: "Pasta Luego", hex: "#F9E27D" },
+];
+
+export const fillColors: Color[] = [
+  { name: "No fill", hex: "transparent" },
+  ...colors,
 ];

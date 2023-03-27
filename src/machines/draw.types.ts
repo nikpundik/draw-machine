@@ -1,18 +1,6 @@
 import { MouseEvent, KeyboardEvent } from "react";
-import { EventObject } from "xstate";
 import { Color } from "../utils/colors";
 import { Tool } from "../utils/tools";
-
-export function assertEventType<
-  TE extends EventObject,
-  TType extends TE["type"]
->(event: TE, eventType: TType): asserts event is TE & { type: TType } {
-  if (event.type !== eventType) {
-    throw new Error(
-      `Invalid event: expected "${eventType}", got "${event.type}"`
-    );
-  }
-}
 
 export type DrawMachineEvents =
   | {
@@ -27,6 +15,7 @@ export type DrawMachineEvents =
   | { type: "MOUSE_OUT"; event: MouseEvent<HTMLCanvasElement> }
   | { type: "BACKSPACE_PRESS"; event: KeyboardEvent<HTMLCanvasElement> }
   | { type: "CHANGE_COLOR"; color: Color }
+  | { type: "CHANGE_FILL_COLOR"; color: Color }
   | { type: "CHANGE_STROKE_WIDTH"; width: number }
   | { type: "CHANGE_TOOL"; tool: Tool }
   | { type: "TOGGLE_GUI" }
@@ -41,5 +30,6 @@ export type DrawMachineContext = {
   line: { x: number; y: number } | null;
   history: ImageData[];
   color: Color;
+  fillColor: Color;
   strokeWidth: number;
 };

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useDrawMachine } from "../../providers/global";
-import { colors } from "../../utils/colors";
+import { colors, fillColors } from "../../utils/colors";
 import { Tool, tools } from "../../utils/tools";
 
 const widths = [5, 10, 15, 20];
@@ -43,6 +43,26 @@ const GUI: FC = () => {
             }}
           >
             {colors.map((color) => (
+              <option key={color.hex} value={color.hex}>
+                {color.name}
+              </option>
+            ))}
+          </select>
+          <select
+            value={current.context.fillColor.hex}
+            onChange={(event) => {
+              const color = fillColors.find(
+                ({ hex }) => event.target.value === hex
+              );
+              if (color) {
+                send({
+                  type: "CHANGE_FILL_COLOR",
+                  color,
+                });
+              }
+            }}
+          >
+            {fillColors.map((color) => (
               <option key={color.hex} value={color.hex}>
                 {color.name}
               </option>
