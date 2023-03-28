@@ -1,4 +1,5 @@
 import { MouseEvent, KeyboardEvent } from "react";
+import Stage from "../lib/Stage";
 import { Color } from "../utils/colors";
 import { Tool } from "../utils/tools";
 
@@ -22,13 +23,8 @@ export type DrawMachineEvents =
   | { type: "RESIZE" };
 
 export type DrawMachineContext = {
-  canvas: HTMLCanvasElement | null;
-  supportCanvas: HTMLCanvasElement | null;
-  ctx: CanvasRenderingContext2D | null;
-  supportCtx: CanvasRenderingContext2D | null;
+  stage: Stage | null;
   tool: Tool;
-  line: { x: number; y: number } | null;
-  history: ImageData[];
   color: Color;
   fillColor: Color;
   strokeWidth: number;
